@@ -7,7 +7,7 @@ class BTN extends StatefulWidget {
   final title;
   final splashColor;
   final double? fontSize;
-  final double width;
+
   final color;
   final fontWeight;
   final textColor;
@@ -18,7 +18,6 @@ class BTN extends StatefulWidget {
     Key? key,
     required this.title,
     required this.onPressed,
-    required this.width,
     this.splashColor,
     this.fontSize,
     this.color,
@@ -35,7 +34,6 @@ class _BTNState extends State<BTN> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widget.width,
       child: MaterialButton(
         onPressed: widget.onPressed,
         color: Colors.black,

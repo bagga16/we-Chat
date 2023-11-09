@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:we_chat/App%20UI/Screens/Home.dart';
+import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
 import 'package:we_chat/App%20UI/Splash%20Screen.dart';
-import 'package:we_chat/App%20UI/aaaa.dart';
 
+late Size mq;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Platform.isAndroid
@@ -16,11 +18,15 @@ void main() async {
       : await Firebase.initializeApp();
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   runApp(MaterialApp(
+    title: "We Chat",
+    theme: ThemeData(primaryColor: Colors.greenAccent),
     debugShowCheckedModeBanner: false,
     initialRoute: 'Splash_Screen',
     routes: {
       'Splash_Screen': (context) => Splash_Screen(),
-      'AAAAA': (context) => AAAAA()
+      'Home_0': (context) => Home_0(),
+      'Login_Screen1': (context) => Login_Screen1()
+
       // 'MyHomePage': (context) => MyHomePage(),
     },
   ));

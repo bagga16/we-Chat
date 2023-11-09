@@ -44,17 +44,19 @@ dependencies:
   firebase_core: ^2.17.0
   fluttertoast: ^8.2.2
   video_player: ^2.7.2
+  animations: ^2.0.8
+  google_sign_in: ^6.1.6
   
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
-flutter_icons:
-    android: true
-    ios: true
-    image_path: 'assets/images/messages.png'
+#   flutter_launcher_icons: ^0.13.1
+# flutter_icons:
+#     android: true
+#     ios: true
+#     image_path: 'assets/images/messages.png'
 
     
       

@@ -40,11 +40,11 @@ class _Login_Screen1State extends State<Login_Screen1>
 
   _handleGoogleBtnClick() {
     Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((User) {
+    _signInWithGoogle().then((user) {
       Navigator.pop(context);
-      if (User != null) {
-        log('\nUser: ${User.user} ');
-        log('UserAdditionalInfo: ${User.additionalUserInfo} ');
+      if (user != null) {
+        log('\nUser: ${user.user} ');
+        log('UserAdditionalInfo: ${user.additionalUserInfo} ');
 
         Navigator.pushReplacement(
           context,

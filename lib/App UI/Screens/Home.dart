@@ -48,7 +48,8 @@ class _Home_0State extends State<Home_0> {
           ),
         ),
         body: ListView.builder(
-            itemCount: 3,
+            itemCount: 15,
+            physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Chat_User_Card();
             }));

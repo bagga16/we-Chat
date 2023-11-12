@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
+import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Widgets/chat%20User%20card.dart';
+import 'package:we_chat/components/Apis.dart';
+import 'package:we_chat/components/text/app_text.dart';
 
 class Home_0 extends StatefulWidget {
   const Home_0({super.key});
@@ -13,6 +18,7 @@ class Home_0 extends StatefulWidget {
 }
 
 class _Home_0State extends State<Home_0> {
+  List<ChatUser> list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,11 +53,42 @@ class _Home_0State extends State<Home_0> {
             child: Icon(Icons.message_rounded),
           ),
         ),
-        body: ListView.builder(
-            itemCount: 15,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Chat_User_Card();
+        body: StreamBuilder(
+            stream: APIs.firestore.collection('User').snapshots(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                //if data is loading
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                //if some or all data is loded then
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+                  list =
+                      data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                          [];
+                  if (list.isNotEmpty) {
+                    return ListView.builder(
+                        itemCount: list.length,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Chat_User_Card(
+                            user: list[index],
+                          );
+                        });
+                  } else {
+                    return Center(
+                      child: CustomText(
+                        title: "Start a Chat",
+                        fontSize: 30,
+                        color: Colors.greenAccent.shade400,
+                      ),
+                    );
+                  }
+              }
             }));
   }
 }

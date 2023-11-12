@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/components/text/app_text.dart';
 import 'package:we_chat/main.dart';
 
 class Chat_User_Card extends StatefulWidget {
-  const Chat_User_Card({super.key});
+  final ChatUser user;
+  const Chat_User_Card({super.key, required this.user});
 
   @override
   State<Chat_User_Card> createState() => _Chat_User_CardState();
@@ -24,12 +26,12 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
               // tileColor: const Color.fromARGB(221, 196, 179, 179),
               leading: CircleAvatar(child: Icon(CupertinoIcons.person)),
               title: CustomText(
-                title: 'User Name',
+                title: widget.user.name,
                 //fontWeight: FontWeight.w500,
                 fontSize: 18,
               ),
               subtitle: CustomText(
-                title: 'Last message',
+                title: widget.user.about,
                 color: Colors.black54,
                 fontWeight: FontWeight.w500,
                 fontSize: 14,

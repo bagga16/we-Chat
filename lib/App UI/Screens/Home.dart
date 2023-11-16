@@ -43,7 +43,7 @@ class _Home_0State extends State<Home_0> {
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 61, 199, 132),
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+              await APIs.auth.signOut();
               await GoogleSignIn().signOut();
               Navigator.pushReplacement(
                 context,
@@ -54,7 +54,7 @@ class _Home_0State extends State<Home_0> {
           ),
         ),
         body: StreamBuilder(
-            stream: APIs.firestore.collection('User').snapshots(),
+            stream: APIs.firestore.collection('Users').snapshots(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 //if data is loading

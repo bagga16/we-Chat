@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/App%20UI/Screens/Home.dart';
 import 'package:we_chat/Utils/Dialoges.dart';
+import 'package:we_chat/components/Apis.dart';
 import 'package:we_chat/components/text/app_text.dart';
 import 'package:we_chat/main.dart';
 
@@ -40,16 +41,24 @@ class _Login_Screen1State extends State<Login_Screen1>
 
   _handleGoogleBtnClick() {
     Dialogs.showProgressBar(context);
-    _signInWithGoogle().then((user) {
+    _signInWithGoogle().then((user) async {
       Navigator.pop(context);
       if (user != null) {
         log('\nUser: ${user.user} ');
         log('UserAdditionalInfo: ${user.additionalUserInfo} ');
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => Home_0()),
-        );
+        if ((await APIs.userExists())) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => Home_0()),
+          );
+        } else {
+          await APIs.createUser().then((value) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => Home_0()),
+            );
+          });
+        }
       }
     });
   }
@@ -62,7 +71,7 @@ class _Login_Screen1State extends State<Login_Screen1>
           await googleUser?.authentication;
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log('\n_signInWithGoogle: $e');
       Dialogs.showSnackbar(context,

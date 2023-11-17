@@ -54,7 +54,7 @@ class _Home_0State extends State<Home_0> {
           ),
         ),
         body: StreamBuilder(
-            stream: APIs.firestore.collection('Users').snapshots(),
+            stream: APIs.firestore.collection('users').snapshots(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 //if data is loading

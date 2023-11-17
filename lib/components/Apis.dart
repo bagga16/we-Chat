@@ -12,7 +12,7 @@ class APIs {
   static User get user => auth.currentUser!;
   //for checking if user is exist or not
   static Future<bool> userExists() async {
-    return (await firestore.collection('users').doc(user.uid).get()).exists;
+    return (await firestore.collection('Users').doc(user.uid).get()).exists;
   }
 
   //for creating new User
@@ -25,7 +25,7 @@ class APIs {
         about: "Hey, I'm using it",
         image: user.photoURL.toString(),
         createdAt: time,
-        isOmline: false,
+        isOnline: '',
         lastActive: time,
         pushToken: '');
 

@@ -4,7 +4,7 @@ class ChatUser {
     required this.about,
     required this.name,
     required this.createdAt,
-    required this.isOmline,
+    required this.isOnline,
     required this.id,
     required this.lastActive,
     required this.email,
@@ -18,14 +18,14 @@ class ChatUser {
   late final String lastActive;
   late final String email;
   late final String pushToken;
-  late final bool isOmline;
+  late final String isOnline;
 
   ChatUser.fromJson(Map<String, dynamic> json) {
     image = json['image'] ?? '';
     about = json['about'] ?? '';
     name = json['name'] ?? '';
     createdAt = json['createdAt'] ?? '';
-    isOmline = json['isOnline'] ?? '';
+    isOnline = json['isOnline'] ?? '';
     id = json['id'] ?? '';
     lastActive = json['lastActive'] ?? '';
     email = json['email'] ?? '';
@@ -38,7 +38,7 @@ class ChatUser {
     data['about'] = about;
     data['name'] = name;
     data['createdAt'] = createdAt;
-    data['is_online'] = isOmline;
+    data['is_online'] = isOnline;
     data['id'] = id;
     data['last_active'] = lastActive;
 

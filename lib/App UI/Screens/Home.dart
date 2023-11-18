@@ -19,7 +19,11 @@ class Home_0 extends StatefulWidget {
 }
 
 class _Home_0State extends State<Home_0> {
-  List<ChatUser> list = [];
+  List<ChatUser> _list = [];
+  //for Searching
+  final List<ChatUser> _searchList = [];
+  //for storing Search status
+  bool _isSearching = false;
   @override
   void initState() {
     super.initState();
@@ -28,79 +32,133 @@ class _Home_0State extends State<Home_0> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 61, 199, 132),
-          centerTitle: true,
-          leading: Icon(CupertinoIcons.home),
-          title: Text('We Chat'),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.search),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: WillPopScope(
+        //agr search on hogi to hide ho jay gi
+        //or agr search off hogi to app close hogi
+        onWillPop: () {
+          if (_isSearching) {
+            setState(() {
+              _isSearching = !_isSearching;
+            });
+            return Future.value(false);
+          } else {
+            return Future.value(true);
+          }
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color.fromARGB(255, 61, 199, 132),
+              centerTitle: true,
+              leading: Icon(CupertinoIcons.home),
+              title: _isSearching
+                  ? TextField(
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: 'Search...'),
+                      autocorrect: true,
+                      autofocus: true,
+                      style: TextStyle(fontSize: 18, letterSpacing: .5),
+
+                      //When search text changes then update search list
+                      onChanged: (val) {
+                        _searchList.clear();
+                        for (var i in _list) {
+                          if (i.name
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase()) ||
+                              i.email
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase())) {
+                            _searchList.add(i);
+                          }
+                          setState(() {
+                            _searchList;
+                          });
+                        }
+                      },
+                    )
+                  : Text('We Chat'),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = !_isSearching;
+                    });
+                  },
+                  icon: Icon(_isSearching
+                      ? CupertinoIcons.clear_circled
+                      : Icons.search),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => Profile_Screen(user: APIs.me)));
+                  },
+                  icon: Icon(Icons.more_vert),
+                )
+              ],
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: FloatingActionButton(
+                backgroundColor: const Color.fromARGB(255, 61, 199, 132),
+                onPressed: () async {
+                  await APIs.auth.signOut();
+                  await GoogleSignIn().signOut();
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => Profile_Screen(user: APIs.me)));
-              },
-              icon: Icon(Icons.more_vert),
-            )
-          ],
-        ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(255, 61, 199, 132),
-            onPressed: () async {
-              await APIs.auth.signOut();
-              await GoogleSignIn().signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => Login_Screen1()),
-              );
-            },
-            child: Icon(Icons.message_rounded),
-          ),
-        ),
-        body: StreamBuilder(
-            stream: APIs.getAllUsers(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                //if data is loading
-                case ConnectionState.waiting:
-                case ConnectionState.none:
-                  return Center(
-                    child: CircularProgressIndicator(),
+                    MaterialPageRoute(builder: (_) => Login_Screen1()),
                   );
-                //if some or all data is loded then
-                case ConnectionState.active:
-                case ConnectionState.done:
-                  final data = snapshot.data?.docs;
-                  list =
-                      data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
+                },
+                child: Icon(Icons.message_rounded),
+              ),
+            ),
+            body: StreamBuilder(
+                stream: APIs.getAllUsers(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    //if data is loading
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    //if some or all data is loded then
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      final data = snapshot.data?.docs;
+                      _list = data
+                              ?.map((e) => ChatUser.fromJson(e.data()))
+                              .toList() ??
                           [];
-                  if (list.isNotEmpty) {
-                    return ListView.builder(
-                        itemCount: list.length,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Chat_User_Card(
-                            user: list[index],
-                          );
-                        });
-                  } else {
-                    return Center(
-                      child: CustomText(
-                        title: "Start a Chat",
-                        fontSize: 30,
-                        color: Colors.greenAccent.shade400,
-                      ),
-                    );
+                      if (_list.isNotEmpty) {
+                        return ListView.builder(
+                            itemCount: _isSearching
+                                ? _searchList.length
+                                : _list.length,
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Chat_User_Card(
+                                user: _isSearching
+                                    ? _searchList[index]
+                                    : _list[index],
+                              );
+                            });
+                      } else {
+                        return Center(
+                          child: CustomText(
+                            title: "Start a Chat",
+                            fontSize: 30,
+                            color: Colors.greenAccent.shade400,
+                          ),
+                        );
+                      }
                   }
-              }
-            }));
+                })),
+      ),
+    );
   }
 }

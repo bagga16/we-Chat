@@ -28,7 +28,7 @@ class TextEditField extends StatefulWidget {
     required this.hintText,
     this.errorText,
     required this.textEditingController,
-    this.labelText = "",
+    this.labelText = '',
     this.isPassword = false,
     this.hintSize = 18,
     this.radius = 8,

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:we_chat/App%20UI/Screens/Profile%20Screen.dart';
 import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Widgets/chat%20User%20card.dart';
@@ -20,6 +21,12 @@ class Home_0 extends StatefulWidget {
 class _Home_0State extends State<Home_0> {
   List<ChatUser> list = [];
   @override
+  void initState() {
+    super.initState();
+    APIs.getSelfInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -33,7 +40,12 @@ class _Home_0State extends State<Home_0> {
               icon: Icon(Icons.search),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Profile_Screen(user: APIs.me)));
+              },
               icon: Icon(Icons.more_vert),
             )
           ],
@@ -54,7 +66,7 @@ class _Home_0State extends State<Home_0> {
           ),
         ),
         body: StreamBuilder(
-            stream: APIs.firestore.collection('users').snapshots(),
+            stream: APIs.getAllUsers(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 //if data is loading

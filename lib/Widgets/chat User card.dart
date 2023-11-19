@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:we_chat/App%20UI/Screens/chat%20Scree.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/components/text/app_text.dart';
 import 'package:we_chat/main.dart';
@@ -23,7 +24,12 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
         // color: Colors.greenAccent.shade100,
         margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
         child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => ChatScreen(user: widget.user)));
+            },
             child: ListTile(
                 // tileColor: const Color.fromARGB(221, 196, 179, 179),
                 //leading: CircleAvatar(child: Icon(CupertinoIcons.person)),

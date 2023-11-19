@@ -245,6 +245,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                       onPressed: () async {
                         final ImagePicker picker = ImagePicker();
 
+                        // Pick an image
                         final XFile? image = await picker.pickImage(
                             source: ImageSource.gallery, imageQuality: 80);
                         if (image != null) {
@@ -252,9 +253,9 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                           setState(() {
                             _image = image.path;
                           });
-                          APIs.updateProfilePicture(File(_image!));
-                          //for hiding bottom sheet
 
+                          APIs.updateProfilePicture(File(_image!));
+                          // for hiding bottom sheet
                           Navigator.pop(context);
                         }
                       },
@@ -266,16 +267,18 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                   ElevatedButton(
                       onPressed: () async {
                         final ImagePicker picker = ImagePicker();
-                        final XFile? image =
-                            await picker.pickImage(source: ImageSource.camera);
+
+                        // Pick an image
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 80);
                         if (image != null) {
                           log('Image Path: ${image.path}');
                           setState(() {
                             _image = image.path;
                           });
-                          APIs.updateProfilePicture(File(_image!));
-                          //for hiding bottom sheet
 
+                          APIs.updateProfilePicture(File(_image!));
+                          // for hiding bottom sheet
                           Navigator.pop(context);
                         }
                       },

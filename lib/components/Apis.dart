@@ -72,27 +72,34 @@ class APIs {
         .update({'name': me.name, 'about': me.about});
   }
 
-  //Update profile Picture of user
+  // update profile picture of user
   static Future<void> updateProfilePicture(File file) async {
-    //Getting image file extensio
+    //getting image file extension
     final ext = file.path.split('.').last;
     log('Extension: $ext');
 
-    //storage file refrence with path
+    //storage file ref with path
     final ref = storage.ref().child('profile_pictures/${user.uid}.$ext');
 
-    //Uploading image
+    //uploading image
     await ref
         .putFile(file, SettableMetadata(contentType: 'image/$ext'))
         .then((p0) {
-      log('Data Transfered: ${p0.bytesTransferred / 1000} kb');
+      log('Data Transferred: ${p0.bytesTransferred / 1000} kb');
     });
 
-    //Uploading image in firestore database
+    //updating image in firestore database
     me.image = await ref.getDownloadURL();
     await firestore
         .collection('users')
         .doc(user.uid)
         .update({'image': me.image});
+  }
+
+  ///************** Chat Screen Related APIs **************
+
+  // for getting all messages of a specific conversation from firestore database
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages() {
+    return firestore.collection('messages').snapshots();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:we_chat/Models/messgae.dart';
+import 'package:we_chat/Utils/my%20date_util.dart';
 import 'package:we_chat/components/Apis.dart';
 
 class MessageCard extends StatefulWidget {
@@ -20,6 +21,10 @@ class _MessageCardState extends State<MessageCard> {
   }
 
   Widget _blueMessage() {
+    //Update last read msg
+    if (widget.message.read.isNotEmpty) {
+      APIs.updateMessageReadStatus(widget.message);
+    }
     return Row(
       children: [
         //message content
@@ -64,7 +69,8 @@ class _MessageCardState extends State<MessageCard> {
         Padding(
           padding: EdgeInsets.only(right: 40),
           child: Text(
-            (widget.message.sent),
+            MyDateUtil.getFormattedTime(
+                context: context, time: widget.message.sent),
             style: const TextStyle(fontSize: 13, color: Colors.black54),
           ),
         ),
@@ -91,7 +97,8 @@ class _MessageCardState extends State<MessageCard> {
 
             //sent time
             Text(
-              (widget.message.sent),
+              MyDateUtil.getFormattedTime(
+                  context: context, time: widget.message.sent),
               style: const TextStyle(fontSize: 13, color: Colors.black54),
             ),
           ],

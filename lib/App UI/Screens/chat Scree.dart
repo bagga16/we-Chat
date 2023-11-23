@@ -23,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> _list = [];
 
   //for handling message text changes
-  //final _textController = TextEditingController();
+  final _textController = TextEditingController();
 
   //showEmoji -- for storing value of showing or hiding emoji
   //isUploading -- for checking if image is uploading or not?
@@ -43,36 +43,22 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: APIs.getAllMessages(),
+                stream: APIs.getAllMessages(widget.user),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     //if data is loading
                     case ConnectionState.waiting:
                     case ConnectionState.none:
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return SizedBox();
 
                     //if some or all data is loaded then show it
                     case ConnectionState.active:
                     case ConnectionState.done:
                       final data = snapshot.data?.docs;
-                      log('Data: ${jsonEncode(data![0].data())}');
-                      _list.clear();
-                      _list.add(Message(
-                          toId: 'xyz',
-                          msg: 'Salam',
-                          read: '',
-                          type: Type.text,
-                          fromId: APIs.user.uid,
-                          sent: '12:00 pm'));
-                      _list.add(Message(
-                          toId: APIs.user.uid,
-                          msg: 'Walikum Salam',
-                          read: '',
-                          type: Type.text,
-                          fromId: 'xyz',
-                          sent: '12:00 pm'));
+                      _list = data
+                              ?.map((e) => Message.fromJson(e.data()))
+                              .toList() ??
+                          [];
                       if (_list.isNotEmpty) {
                         return ListView.builder(
                             itemCount: _list.length,
@@ -84,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       } else {
                         return const Center(
                           child: Text('Say Hii! 👋',
-                              style: TextStyle(fontSize: 20)),
+                              style: TextStyle(fontSize: 26)),
                         );
                       }
                   }
@@ -177,6 +163,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       )),
                   Expanded(
                     child: TextField(
+                      controller: _textController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -212,7 +199,12 @@ class _ChatScreenState extends State<ChatScreen> {
           //send Button
           MaterialButton(
             minWidth: 0,
-            onPressed: () {},
+            onPressed: () {
+              if (_textController.text.isNotEmpty) {
+                APIs.sendMessage(widget.user, _textController.text, Type.text);
+                _textController.text = '';
+              }
+            },
             padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
             shape: CircleBorder(),
             color: Colors.greenAccent.shade400,

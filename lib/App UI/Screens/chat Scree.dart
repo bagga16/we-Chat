@@ -7,8 +7,10 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Models/messgae.dart';
+import 'package:we_chat/Utils/my%20date_util.dart';
 import 'package:we_chat/Widgets/Message%20Card.dart';
 import 'package:we_chat/components/Apis.dart';
 import 'package:we_chat/main.dart';
@@ -30,8 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   //showEmoji -- for storing value of showing or hiding emoji
   //isUploading -- for checking if image is uploading or not?
-  bool _showEmoji = false;
-  //_isUploading = false;
+  bool _showEmoji = false, _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +96,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                   ),
                 ),
+
+                //Progress indicating bar for shoing progress if is uploading
+                if (_isUploading)
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 30),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    ),
+                  ),
                 _chatInput(),
                 if (_showEmoji)
                   SizedBox(
@@ -119,58 +133,74 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _appBar() {
     return InkWell(
-      onTap: () {},
-      child: Row(
-        children: [
-          //BackButton
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black54,
-              )),
-          //User Profile Picture
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: CachedNetworkImage(
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
-              imageUrl: widget.user.image,
-              errorWidget: (context, url, error) =>
-                  CircleAvatar(child: Icon(CupertinoIcons.person)),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //User name
-              Text(
-                widget.user.name,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Text(
-                "Click for more info",
-                style: TextStyle(
-                    fontSize: 13, color: Color.fromARGB(135, 62, 60, 60)),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+        onTap: () {},
+        child: StreamBuilder(
+            stream: APIs.getUserInfo(widget.user),
+            builder: (context, snapshot) {
+              final data = snapshot.data?.docs;
+              final list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+              return Row(
+                children: [
+                  //BackButton
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.black54,
+                      )),
+                  //User Profile Picture
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
+                      imageUrl:
+                          list.isNotEmpty ? list[0].image : widget.user.image,
+                      errorWidget: (context, url, error) =>
+                          CircleAvatar(child: Icon(CupertinoIcons.person)),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //User name
+                      Text(
+                        list.isNotEmpty ? list[0].name : widget.user.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        list.isNotEmpty
+                            ? list[0].isOnline
+                                ? 'Online'
+                                : MyDateUtil.getLastActiveTime(
+                                    context: context,
+                                    lastActive: list[0].lastActive)
+                            : MyDateUtil.getLastActiveTime(
+                                context: context,
+                                lastActive: widget.user.lastActive),
+                        style: TextStyle(
+                            fontSize: 13,
+                            color: Color.fromARGB(135, 62, 60, 60)),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }));
   }
 
   //Text typing field
@@ -213,7 +243,21 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   //pick image/video from gallery
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+
+                      // Picking multiple images
+                      final List<XFile> images =
+                          await picker.pickMultiImage(imageQuality: 70);
+
+                      // uploading & sending image one by one
+                      for (var i in images) {
+                        log('Image Path: ${i.path}');
+                        setState(() => _isUploading = true);
+                        await APIs.sendChatImage(widget.user, File(i.path));
+                        setState(() => _isUploading = false);
+                      }
+                    },
                     icon: Image.asset(
                       'assets/images/galleryIcon.png',
                       height: 27,
@@ -225,7 +269,21 @@ class _ChatScreenState extends State<ChatScreen> {
                   //record image/video from camera
 
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+
+                        // Pick an image
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 70);
+                        if (image != null) {
+                          log('Image Path: ${image.path}');
+                          setState(() => _isUploading = true);
+
+                          await APIs.sendChatImage(
+                              widget.user, File(image.path));
+                          setState(() => _isUploading = false);
+                        }
+                      },
                       icon: Icon(
                         Icons.camera_alt_rounded,
                         color: Colors.grey,

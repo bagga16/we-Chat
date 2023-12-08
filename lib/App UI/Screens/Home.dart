@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/App%20UI/Screens/Profile%20Screen.dart';
 import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
@@ -28,6 +29,12 @@ class _Home_0State extends State<Home_0> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
+      if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
+
+      return Future.value(message);
+    });
   }
 
   @override

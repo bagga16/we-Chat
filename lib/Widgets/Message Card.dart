@@ -30,8 +30,7 @@ class _MessageCardState extends State<MessageCard> {
         //message content
         Flexible(
           child: Container(
-            padding:
-                EdgeInsets.all(widget.message.type == Type.image ? 40 : 16),
+            padding: EdgeInsets.all(widget.message.type == Type.image ? 8 : 20),
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 221, 245, 255),
@@ -51,7 +50,7 @@ class _MessageCardState extends State<MessageCard> {
                 :
                 //show image
                 ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       imageUrl: widget.message.msg,
                       placeholder: (context, url) => const Padding(

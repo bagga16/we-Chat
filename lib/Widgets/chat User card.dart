@@ -65,7 +65,11 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
                         fontSize: 18,
                       ),
                       subtitle: Text(
-                          _message != null ? _message!.msg : widget.user.about,
+                          _message != null
+                              ? _message!.type == Type.image
+                                  ? 'image'
+                                  : _message!.msg
+                              : widget.user.about,
                           maxLines: 1,
                           style: TextStyle(
                             color: Colors.black54,

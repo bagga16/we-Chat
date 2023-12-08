@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -50,10 +51,12 @@ class _Profile_ScreenState extends State<Profile_Screen> {
               onPressed: () async {
                 //for showing Progreebar
                 Dialogs.showProgressBar(context);
+                await APIs.updateActiveStatus(false);
                 await APIs.auth.signOut();
                 await GoogleSignIn().signOut().then((value) async {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  APIs.auth = FirebaseAuth.instance;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => Login_Screen1()),

@@ -5,6 +5,7 @@ import 'package:we_chat/App%20UI/Screens/chat%20Scree.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Models/messgae.dart';
 import 'package:we_chat/Utils/my%20date_util.dart';
+import 'package:we_chat/Widgets/ProfileDialog.dart';
 import 'package:we_chat/components/Apis.dart';
 import 'package:we_chat/components/text/app_text.dart';
 import 'package:we_chat/main.dart';
@@ -46,17 +47,24 @@ class _Chat_User_CardState extends State<Chat_User_Card> {
                   return ListTile(
                       // tileColor: const Color.fromARGB(221, 196, 179, 179),
                       //leading: CircleAvatar(child: Icon(CupertinoIcons.person)),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: CachedNetworkImage(
-                          height: MediaQuery.of(context).size.height * .06,
-                          width: MediaQuery.of(context).size.height * .06,
+                      leading: InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => ProfileDialog(user: widget.user));
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            height: MediaQuery.of(context).size.height * .06,
+                            width: MediaQuery.of(context).size.height * .06,
 
-                          imageUrl: widget.user.image,
-                          // progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          //     CircularProgressIndicator(value: downloadProgress.progress),
-                          errorWidget: (context, url, error) =>
-                              CircleAvatar(child: Icon(CupertinoIcons.person)),
+                            imageUrl: widget.user.image,
+                            // progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            //     CircularProgressIndicator(value: downloadProgress.progress),
+                            errorWidget: (context, url, error) => CircleAvatar(
+                                child: Icon(CupertinoIcons.person)),
+                          ),
                         ),
                       ),
                       title: CustomText(

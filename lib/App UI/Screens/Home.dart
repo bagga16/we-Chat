@@ -29,10 +29,19 @@ class _Home_0State extends State<Home_0> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
+    APIs.updateActiveStatus(true);
+    //for updating user active status according to lifecycle events
+    //resume -- active or online
+    //pause  -- inactive or offline
     SystemChannels.lifecycle.setMessageHandler((message) {
-      if (message.toString().contains('resume')) APIs.updateActiveStatus(true);
-      if (message.toString().contains('pause')) APIs.updateActiveStatus(false);
-
+      if (APIs.auth.currentUser != null) {
+        if (message.toString().contains('resume')) {
+          APIs.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          APIs.updateActiveStatus(false);
+        }
+      }
       return Future.value(message);
     });
   }

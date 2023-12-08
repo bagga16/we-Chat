@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,12 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:we_chat/App%20UI/Screens/ViewProfileScreen.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Models/messgae.dart';
 import 'package:we_chat/Utils/my%20date_util.dart';
 import 'package:we_chat/Widgets/Message%20Card.dart';
 import 'package:we_chat/components/Apis.dart';
-import 'package:we_chat/main.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser user;
@@ -133,7 +132,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _appBar() {
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ViewProfileScreen(user: widget.user)));
+        },
         child: StreamBuilder(
             stream: APIs.getUserInfo(widget.user),
             builder: (context, snapshot) {

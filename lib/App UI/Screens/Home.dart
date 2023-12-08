@@ -29,7 +29,6 @@ class _Home_0State extends State<Home_0> {
   void initState() {
     super.initState();
     APIs.getSelfInfo();
-    APIs.updateActiveStatus(true);
     //for updating user active status according to lifecycle events
     //resume -- active or online
     //pause  -- inactive or offline

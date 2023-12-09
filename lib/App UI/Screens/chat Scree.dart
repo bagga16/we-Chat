@@ -256,7 +256,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                       // uploading & sending image one by one
                       for (var i in images) {
-                        log('Image Path: ${i.path}');
+                        print('Image Path: ${i.path}');
                         setState(() => _isUploading = true);
                         await APIs.sendChatImage(widget.user, File(i.path));
                         setState(() => _isUploading = false);
@@ -280,7 +280,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         final XFile? image = await picker.pickImage(
                             source: ImageSource.camera, imageQuality: 70);
                         if (image != null) {
-                          log('Image Path: ${image.path}');
+                          print('Image Path: ${image.path}');
                           setState(() => _isUploading = true);
 
                           await APIs.sendChatImage(

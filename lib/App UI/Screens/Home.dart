@@ -93,7 +93,7 @@ class _Home_0State extends State<Home_0> {
                         }
                       },
                     )
-                  : Text('We Chat'),
+                  : Text('Let\'s Chat'),
               actions: [
                 IconButton(
                   onPressed: () {

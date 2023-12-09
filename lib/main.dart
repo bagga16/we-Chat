@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
@@ -19,6 +20,7 @@ void main() async {
               messagingSenderId: "269110250249",
               projectId: "we-chat-34cc7"))
       : await Firebase.initializeApp();
+
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   runApp(MaterialApp(
     title: "We Chat",

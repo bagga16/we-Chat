@@ -252,7 +252,7 @@ class _Profile_ScreenState extends State<Profile_Screen> {
                         final XFile? image = await picker.pickImage(
                             source: ImageSource.gallery, imageQuality: 80);
                         if (image != null) {
-                          log('Image Path: ${image.path}');
+                          print('Image Path: ${image.path}');
                           setState(() {
                             _image = image.path;
                           });

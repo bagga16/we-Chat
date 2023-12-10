@@ -22,24 +22,30 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
           //app bar
-          appBar: AppBar(title: Text(widget.user.name)),
+          appBar: AppBar(
+              centerTitle: true,
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              title: Text(
+                widget.user.name,
+              )),
           floatingActionButton: //user about
               Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Joined On: ',
+                'Joined at: ',
                 style: TextStyle(
                     color: Colors.black87,
                     fontWeight: FontWeight.w500,
-                    fontSize: 15),
+                    fontSize: 18),
               ),
               Text(
                   MyDateUtil.getLastMessageTime(
                       context: context,
-                      time: widget.user.lastActive,
+                      time: widget.user.createdAt,
                       showYear: true),
-                  style: const TextStyle(color: Colors.black54, fontSize: 15)),
+                  style: const TextStyle(color: Colors.black54, fontSize: 18)),
             ],
           ),
 
@@ -53,7 +59,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   // for adding some space
                   SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * .03),
+                      height: MediaQuery.of(context).size.height * .1),
 
                   //user profile picture
                   ClipRRect(
@@ -75,7 +81,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   // user email label
                   Text(widget.user.email,
                       style:
-                          const TextStyle(color: Colors.black87, fontSize: 16)),
+                          const TextStyle(color: Colors.black87, fontSize: 20)),
 
                   // for adding some space
                   SizedBox(height: 20),
@@ -89,11 +95,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                         style: TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15),
+                            fontSize: 20),
                       ),
                       Text(widget.user.about,
                           style: const TextStyle(
-                              color: Colors.black54, fontSize: 15)),
+                              color: Colors.black54, fontSize: 20)),
                     ],
                   ),
                 ],

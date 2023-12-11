@@ -1,12 +1,7 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/App%20UI/Screens/Profile%20Screen.dart';
-import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Utils/Dialoges.dart';
 import 'package:we_chat/Widgets/chat%20User%20card.dart';

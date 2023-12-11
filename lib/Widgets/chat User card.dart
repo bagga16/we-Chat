@@ -8,7 +8,6 @@ import 'package:we_chat/Utils/my%20date_util.dart';
 import 'package:we_chat/Widgets/ProfileDialog.dart';
 import 'package:we_chat/components/Apis.dart';
 import 'package:we_chat/components/text/app_text.dart';
-import 'package:we_chat/main.dart';
 
 class Chat_User_Card extends StatefulWidget {
   final ChatUser user;

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:we_chat/App%20UI/Screens/ViewProfileScreen.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 
-import '../../main.dart';
-
 class ProfileDialog extends StatelessWidget {
   const ProfileDialog({super.key, required this.user});
 

@@ -6,7 +6,6 @@ import 'package:we_chat/Models/messgae.dart';
 import 'package:we_chat/Utils/Dialoges.dart';
 import 'package:we_chat/Utils/my%20date_util.dart';
 import 'package:we_chat/components/Apis.dart';
-import 'package:we_chat/main.dart';
 
 class MessageCard extends StatefulWidget {
   final Message message;

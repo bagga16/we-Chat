@@ -29,7 +29,7 @@ class _MessageCardState extends State<MessageCard> {
 
   Widget _blueMessage() {
     //Update last read msg
-    if (widget.message.read.isNotEmpty) {
+    if (widget.message.read.isEmpty) {
       APIs.updateMessageReadStatus(widget.message);
     }
     return Row(
@@ -96,7 +96,7 @@ class _MessageCardState extends State<MessageCard> {
 
             //double tick blue icon for message read
             if (widget.message.read.isNotEmpty)
-              const Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
+              const Icon(Icons.done_all_rounded, color: Colors.white, size: 24),
 
             //for adding some space
             const SizedBox(width: 2),

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:we_chat/App%20UI/Screens/Home.dart';
 import 'package:we_chat/App%20UI/Screens/auth/Login%20screen.dart';
 import 'package:we_chat/Models/chat%20User.dart';
 import 'package:we_chat/Utils/Dialoges.dart';
@@ -33,16 +34,16 @@ class _Profile_ScreenState extends State<Profile_Screen> {
       },
       child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 61, 199, 132),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
             centerTitle: true,
-            leading: Icon(CupertinoIcons.home),
+            leading: InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (_) => Home_0()));
+                },
+                child: Icon(CupertinoIcons.home)),
             title: Text('Profile'),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.more_vert),
-              )
-            ],
           ),
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 10),

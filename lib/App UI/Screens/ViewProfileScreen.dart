@@ -99,7 +99,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                       ),
                       Text(widget.user.about,
                           style: const TextStyle(
-                              color: Colors.black54, fontSize: 20)),
+                              color: Colors.black54, fontSize: 18)),
                     ],
                   ),
                 ],

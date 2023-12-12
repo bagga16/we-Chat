@@ -118,12 +118,6 @@ class _Home_0State extends State<Home_0> {
                 backgroundColor: const Color.fromARGB(255, 61, 199, 132),
                 onPressed: () async {
                   _addChatUserDialog();
-                  // await APIs.auth.signOut();
-                  // await GoogleSignIn().signOut();
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(builder: (_) => Login_Screen1()),
-                  // );
                 },
                 child: Icon(Icons.message_rounded),
               ),
